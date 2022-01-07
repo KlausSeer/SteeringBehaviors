@@ -17,7 +17,7 @@ public class Steering : MonoBehaviour
     [SerializeField]
     private float speed = 5.0f;
 
-    [Range(0.0f, 1.0f)]
+    [Range(0.0f, 2.0f)]
     [SerializeField]
     private float slowDownRadius = 1.0f;
 
@@ -62,10 +62,15 @@ public class Steering : MonoBehaviour
                 velocity += steering * Time.deltaTime;
                 break;
             case Behavior.ARRIVAL:
+                float slowDownFactor = targetDistance.magnitude > slowDownRadius? 1.0f : targetDistance.magnitude/2;
+                float stopFactor = targetDistance.magnitude > slowDownRadius/10 ? 1.0f : 0.0f;
+
+                desiredVelocity *= slowDownFactor;
+
                 steering = Seek(desiredVelocity);
 
-                float slowDownFactor = Mathf.Clamp01(targetDistance.magnitude / slowDownRadius);
-                velocity *= slowDownFactor;
+                velocity *= stopFactor;
+
                 velocity += steering * Time.deltaTime;
 
                 break;
