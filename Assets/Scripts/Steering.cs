@@ -236,7 +236,11 @@ public class Steering : MonoBehaviour
 
                 nodePosition = PathFollowing();
 
+                targetDistance = (nodePosition - (Vector2)transform.position);
+                desiredVelocity = targetDistance.normalized * speed;
 
+                steering = Seek(desiredVelocity);
+                velocity += steering * Time.deltaTime;
                 break;
             default:
                 break;
